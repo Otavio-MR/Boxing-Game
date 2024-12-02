@@ -1,2 +1,2 @@
 # Boxing-Game
-Trabalho - LP
+- Jogo baseado no Boxing Game Atari 2600
