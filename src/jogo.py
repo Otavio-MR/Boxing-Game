@@ -17,8 +17,8 @@ def get_terminal_size():
 
 def draw_ring(nome_jogador="", pontos_jogador=0, nome_oponente="", pontos_oponente=0):
     terminal_width, terminal_height = get_terminal_size()
-    ring_width = min(80, terminal_width - 4)
-    ring_height = min(20, terminal_height - 4)
+    ring_width = min(105, terminal_width - 4)
+    ring_height = min(30, terminal_height - 4)
 
     horizontal_margin = (terminal_width - ring_width) // 2
     vertical_margin = (terminal_height - ring_height) // 2
@@ -49,19 +49,89 @@ def draw_ring(nome_jogador="", pontos_jogador=0, nome_oponente="", pontos_oponen
     return ring_width, ring_height
 
 class Personagem:
+    # Colocando a arte ASCII fornecida na variável arte_normal
     arte_normal = """
-     x
-   xxxxx
-     x
-    x x
+                  ########                 
+                ##@@@@@@@@##               
+              ########@@@@@@##             
+        @@++##++++++++........##    ####MM 
+      ##++##  ################    ##++##-- 
+      ####    ########----MM##    ####--MM#
+          ::::####++--++MM::##    ##++@@##M
+        ::      ####--##::##  ##--++++..MM 
+        ::        --##++::######--##++..MM 
+        @@--      ##--##mm--##  ----##..MM 
+        @@##------::--::##--  ..@@    ##   
+        @@--##------    ##----  ..    ##   
+        ::----##--    ##++##----..  ##     
+        ::------##  ##--..  ####----##     
+        ::--------------##                 
+          ##----    --  ##                 
+          ##----  ----##                   
+          ##----  ++--##                   
+          ########mmmmmm##                 
+          ##@@mmmmmmmmmmMM                 
+          ##@@mmmmmmmmmmmm##               
+        ::@@@@mmmm@@##@@mmmmmm##           
+        ::@@@@mmmm##@@@@@@mmmmmm@@         
+        ::@@@@@@mm##@@@@@@@@####           
+        ::##@@@@############....@@         
+          ##------      ##--    --         
+          ##--            ----  --         
+          ##--  ##        ##--  --         
+        ::--..  ##        mm..  @@         
+        ::--    ##        --    @@         
+        ::--  ##          --  ##           
+        ::--  ##          --  ##           
+        ::##--##        ##..##             
+        ##..##        ##++..##             
+        ##..##        ##++..##             
+        ##..##          ##..##             
+        ##++##--          ##--  @@         
+        ##########          ####@@         
     """
+    
     arte_ataque = """
-     x
-   xxxxx>
-     x
-    x x
+                               ..######                                 
+                            ####@@@@@@##                               
+                          ########@@@@@@##                             
+                    ##--##++++++++........##                           
+                  ##++MM  ################                             
+                  ######  ########----MM##                             
+                          ######--      mm::                           
+                          ######----  ####                             
+                      ####--####----##  ##                    ####     
+                  ####  ------++########  ####MM      ++######--..##   
+              ::::@@@@mm##..##  --      ..      ....::@@..--mmmm####   
+              ++##++....##  ##  --      ------      --@@++++++@@--##   
+              mm##++++..##--##  --    ++######--------++##########     
+              MM--##++++######--------@@      ########MM               
+              ++####  @@----  ------##                                 
+                      @@----        ##                                 
+                      ::----  ----##                                   
+                      ::----  ::--##                                   
+                      ::######@@mmmm##                                 
+                      ::@@@@@@mmmmmmmm@@                               
+                      ::@@@@@@mmmmmmmmMM                               
+                      ##@@@@##@@mmmmmmmmmm##                           
+                    ##@@@@@@@@##@@mmmmmmmmmm##                         
+                    ##@@@@@@@@@@@@@@mmmmmm##  MM                       
+                  ##@@@@@@MMMM############..  ::                       
+                    ##------##      ##--      MM                       
+                    ##..  ##        ##--    ##                         
+                  ##--..  ##      ##--..  ##                           
+                  ##--  ##      mmMMmm::++                             
+                ##--  --      ..++++..@@                               
+                ##--  --      ##++..##                                 
+                ##----##    ##++..##                                   
+              ++++++##        --++..##                                 
+              @@++..##          ####--@@                               
+              @@..##              ##  @@                               
+              @@..##                ##@@                               
+            ##++++##--..                                               
+            ############                                               
     """
-
+    
     def __init__(self, nome, x, y, lado):
         self.nome = nome
         self.x = x
@@ -69,6 +139,10 @@ class Personagem:
         self.lado = lado
         self.pontos = 0
         self.atacando = False
+
+        # Calcular altura e largura da arte
+        self.altura = len(self.arte_normal.splitlines())
+        self.largura = max(len(line) for line in self.arte_normal.splitlines())
 
     def desenhar(self, horizontal_margin=0, vertical_margin=0, ring_width=80, ring_height=20):
         arte = self.arte_ataque if self.atacando else self.arte_normal
@@ -80,13 +154,14 @@ class Personagem:
                 print(f"\033[{y_pos + 1};{x_pos + 1}H{line}")
 
     def mover(self, direcao, ring_width, ring_height):
+        # Verifica as colisões, considerando a largura e altura do personagem
         if direcao == 'w' and self.y > 0:
             self.y -= 1
-        elif direcao == 's' and self.y < ring_height - 5:
+        elif direcao == 's' and self.y < ring_height - self.altura:
             self.y += 1
         elif direcao == 'a' and self.x > 0:
             self.x -= 1
-        elif direcao == 'd' and self.x < ring_width - 6:
+        elif direcao == 'd' and self.x < ring_width - self.largura:
             self.x += 1
 
     def atacar(self, oponente, ring_width):
@@ -97,6 +172,7 @@ class Personagem:
         elif self.lado == "direita" and self.x - oponente.x <= 7:
             oponente.receber_dano()
             self.pontos += 1
+
 
 
 
@@ -174,16 +250,7 @@ def new_game():
 
 def main_menu():
     ascii_art = '''
-      
-       /$$        /$$$$$$        /$$$$$$ /$$$$$$          
-      | $$       /$$__  $$      |_  $$_/|_  $$_/          
-      | $$      | $$  \__/        | $$    | $$            
-      | $$      | $$              | $$    | $$            
-      | $$      | $$              | $$    | $$            
-      | $$      | $$    $$        | $$    | $$            
-      | $$$$$$$$|  $$$$$$/       /$$$$$$ /$$$$$$          
-      |________/ \______/       |______/|______/          
-                                                                                                                                                                           
+                                                                                                               
  /$$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$ /$$   /$$  /$$$$$$ 
 | $$__  $$ /$$__  $$| $$  / $$|_  $$_/| $$$ | $$ /$$__  $$
 | $$  \ $$| $$  \ $$|  $$/ $$/  | $$  | $$$$| $$| $$  \__/
@@ -193,9 +260,7 @@ def main_menu():
  | $$$$$$$/|  $$$$$$/| $$  \ $$ /$$$$$$| $$ \  $$|  $$$$$$/ 
 |_______/  \______/ |__/  |__/|______/|__/  \__/ \______/ 
                                                           
-                                                          
-                                                          
-        
+                                                                   
     '''
 
     menu_options = ["Novo jogo", "Continuar", "Ranking", "Opções", "Sair"]
