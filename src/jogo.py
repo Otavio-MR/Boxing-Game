@@ -78,7 +78,7 @@ def new_game():
     personagem = Personagem(nome_jogador, x=2, y=ring_height // 2 - 2, lado="esquerda")
     oponente = Oponente("Inimigo", x=ring_width - 7, y=ring_height // 2 - 2, lado="direita")
 
-    print("\nPressione 'w', 'a', 's', 'd' para mover o personagem, e '8' para atacar.")
+    print("\nPressione 'w', 'a', 's', 'd' para mover o personagem, e 'Espaço' para atacar.")
     time.sleep(2)
 
     while True:
@@ -92,7 +92,7 @@ def new_game():
             elif keyboard.is_pressed('d'):
                 personagem.mover('d', ring_width, ring_height)
 
-        if keyboard.is_pressed('8'):
+        if keyboard.is_pressed('SPACE'):
             personagem.atacar(oponente, ring_width)
         else:
             personagem.atacando = False
