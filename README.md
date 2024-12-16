@@ -16,4 +16,4 @@ Jogo baseado no Boxing Game Atari 2600, onde seu objetivo é disputar contra uma
 - Matheus Henrique Belter
 
 # Licença
-Esse projeto está sendo licenciado sob a licença GNU (General Public License) Version 3, 29 de Junho de 2007
+Esse projeto está sendo licenciado sob a licença GNU (General Public License) Version 3, 29 June 2007
