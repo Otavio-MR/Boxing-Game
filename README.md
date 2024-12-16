@@ -9,5 +9,11 @@ Jogo baseado no Boxing Game Atari 2600, onde seu objetivo é disputar contra uma
 
 # Instalação e Execução
 
+# Membros do Projeto
+- Otavio Marcondes Ramalho
+- Felipe Luis Borges de Lima
+- João Victor Souza Silva
+- Matheus Henrique Belter
+
 # Licença
-Esse projeto está sendo licenciado sob a licença 
+Esse projeto está sendo licenciado sob a licença GNU
